@@ -1,0 +1,20 @@
+interface & user experience
+    easy and straightforward to use
+    work & look decent on mobile
+    no excessive details, only necessary stuff
+        eg. no ratings, just like/superlike system
+    input suggestion for existing titles (probably hard)
+
+app's goal
+    share your interests with minimum effort
+
+features
+    social auth
+    info fetch from MAL, imdb, spotify
+    recommendations
+    basic social stuff like following other people
+
+pages:
+    auth(login/register)
+    add new fav (and there should be suggestions?)
+    user page with his favs
