@@ -1,7 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from baseapp.models import Interest
 import time, json, requests
-import jikanpy
 from django.core import files
 from io import BytesIO
 
