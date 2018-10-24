@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Favorite</title>
+    {% load static %}
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <!-- JS file -->
+    <script src="{% static "jquery.easy-autocomplete.js" %}"></script>
+    <!-- CSS file -->
+    <link rel="stylesheet" href="{% static "easy-autocomplete.css" %}">
+    <!-- Additional CSS Themes file - not required-->
+    <link rel="stylesheet" href="{% static "easy-autocomplete.themes.css" %}">
+</head>
+<body>
+
+
+<div id="opa">
+    opa
+
+    <input id="anime-input"/>
+    <script>
+        let options = {
+            url: "{% static "animes.json" %}",
+            getValue: "name",
+            list: {
+                match: {
+                    enabled: true
+                }
+            },
+
+            template: {
+                type: "iconLeft",
+                fields: {
+                    iconSrc: "thumbnail"
+                }
+            },
+
+            theme: "square"
+        };
+
+
+        $("#anime-input").easyAutocomplete(options);
+
+
+    </script>
+
+
+    <img src="https://myanimelist.cdn-dena.com/images/anime/6/23215.jpg?s=fb1c1654bb5e2aaaa0413fc4cd391c28" alt="" class = eac-icon">
+
+</div>
+
+</body>
+</html>

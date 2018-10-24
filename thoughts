@@ -18,7 +18,3 @@ pages:
     auth(login/register)
     add new fav (and there should be suggestions?)
     user page with his favs
-
-
-Test:
-    something4
