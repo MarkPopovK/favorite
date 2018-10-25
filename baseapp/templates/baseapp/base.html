@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
+          integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>-->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
+    <!--<script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>-->
+
+    {% block header %}
+
+    {% endblock %}
+
+    <style>
+        body {
+            background-color: #f5f8fa;
+        }
+
+        .navbar {
+            background-color: #10BBB3;
+        }
+
+
+    </style>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-light">
+
+    <div class="d-flex align-items-center text-white" href="#">
+        {{ request.user.first_name }} {{ request.user.last_name }}
+        <img src="{{ request.user.profile.avatar.url }}" width="50" height="50"
+             class="d-inline-block align-top" alt="">
+    </div>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01"
+            aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+        <!--<a class="navbar-brand ml-auto" href="#">Hidden brand</a>-->
+        <ul class="navbar-nav ml-auto">
+            {% if not request.user.is_authenticate %}
+
+                <li class="nav-item active text-white">
+                    <a class="nav-link text-white" href="#">Register <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item active text-white">
+                    <a class="nav-link text-white" href="#">Login <span class="sr-only">(current)</span></a>
+                </li>
+
+            {% endif %}
+            <li class="nav-item active text-white">
+                <a class="nav-link text-white" href="#">About Us <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active text-white">
+                <a class="nav-link text-white" href="#">Contact Us <span class="sr-only">(current)</span></a>
+            </li>
+
+        {% if request.user.is_authenticate %}
+            <li class="nav-item text-white">
+                <a class="nav-link text-white" href="{% url 'logout' %}">Logout</a>
+            </li>
+        {% endif %}
+        </ul>
+    </div>
+</nav>
+
+{% block user_info %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12 bg-white p-2 rounded mt-2">
+                <div class="d-flex justify-content-center text-center">
+                    <ul class="list-unstyled">
+                        <li><img class="rounded-circle" src="{{ owner.profile.avatar.url }}" width="150" height="150"
+                                 alt="profile_picture"></li>
+                        <li class="pt-2"><h6>{{ owner.username }}</h6></li>
+                        <li><span>{{ owner.profile.about_me }}</span></li>
+                        <li><span>{{ request.get_path }}</span></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+
+{% endblock %}
+
+
+<script>
+    $('tr[rel=popover]').popover({
+        html: true,
+        trigger: 'hover',
+        placement: 'bottom',
+        content: function () {
+            return '<img src="' + $(this).data('img') + '" />';
+        }
+    });
+</script>
+</body>
+</html>

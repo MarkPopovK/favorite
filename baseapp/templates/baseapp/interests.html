@@ -1,0 +1,44 @@
+{% extends 'baseapp/base.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12 interests m-3 text-center">
+{#                    <ul class="list-inline">#}
+{#                        <li class="list-inline-item">#}
+{#                            <h2>Interests</h2>#}
+{#                        </li>#}
+{#                        <li class="list-inline-item">#}
+{#                            <i class="fa fa-search"></i>#}
+{#                        </li>#}
+{#                    </ul>#}
+            <div class="row align-items-center justify-content-center">
+                <h2>Interests</h2>
+                <i class="fa fa-search ml-2"></i>
+            </div>
+                <!--<h2 class="text-center display-4 inline-headers">Interests</h2>-->
+                <table class="table table-striped mt-2">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Type</th>
+                        <th scope="col"></th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for interest in owner.interests.all %}
+                        <tr rel="popover" data-img="{{ interest.thumbnail.url }}">
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>{{ interest.name }}</td>
+                            <td>{{ interest.interest_type }}</td>
+                            <td>{{ interest.interest_type }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
