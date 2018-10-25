@@ -13,6 +13,7 @@ features
     info fetch from MAL, imdb, spotify
     recommendations
     basic social stuff like following other people
+    buttons: search, copy, superlike, edit, delete
 
 pages:
     auth(login/register)

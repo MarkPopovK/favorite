@@ -1,23 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Favorite</title>
+    {% extends 'baseapp/base.html' %}
     {% load static %}
-    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-    <!-- JS file -->
+    {% block header %}
     <script src="{% static "jquery.easy-autocomplete.js" %}"></script>
-    <!-- CSS file -->
     <link rel="stylesheet" href="{% static "easy-autocomplete.css" %}">
-    <!-- Additional CSS Themes file - not required-->
     <link rel="stylesheet" href="{% static "easy-autocomplete.themes.css" %}">
-</head>
-<body>
+    {% endblock %}
 
 
-<div id="opa">
-    opa
-
+{% block content %}
+<div class="container">
     <input id="anime-input"/>
     <script>
         let options = {
@@ -38,14 +29,7 @@
 
             theme: "square"
         };
-
-
         $("#anime-input").easyAutocomplete(options);
-
-
     </script>
-
 </div>
-
-</body>
-</html>
+{% endblock %}

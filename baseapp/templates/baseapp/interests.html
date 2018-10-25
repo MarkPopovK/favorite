@@ -4,36 +4,55 @@
     <div class="container">
         <div class="row">
             <div class="col-12 interests m-3 text-center">
-{#                    <ul class="list-inline">#}
-{#                        <li class="list-inline-item">#}
-{#                            <h2>Interests</h2>#}
-{#                        </li>#}
-{#                        <li class="list-inline-item">#}
-{#                            <i class="fa fa-search"></i>#}
-{#                        </li>#}
-{#                    </ul>#}
-            <div class="row align-items-center justify-content-center">
-                <h2>Interests</h2>
-                <i class="fa fa-search ml-2"></i>
-            </div>
-                <!--<h2 class="text-center display-4 inline-headers">Interests</h2>-->
+                <div class="row align-items-center justify-content-center">
+                    <h2>Interests</h2>
+                    <i class="fa fa-search ml-2"></i>
+                </div>
                 <table class="table table-striped mt-2">
                     <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Name</th>
                         <th scope="col">Type</th>
                         <th scope="col"></th>
+                        <th scope="col">Name</th>
+                        <th scope="col"></th>
+                        <th scope="col">Note</th>
 
                     </tr>
                     </thead>
                     <tbody>
-                    {% for interest in owner.interests.all %}
-                        <tr rel="popover" data-img="{{ interest.thumbnail.url }}">
+                    {% for interested in owner.interested_set.all %}
+                        <tr rel="popover" data-img="{{ interested.interest.thumbnail.url }}">
                             <th scope="row">{{ forloop.counter }}</th>
-                            <td>{{ interest.name }}</td>
-                            <td>{{ interest.interest_type }}</td>
-                            <td>{{ interest.interest_type }}</td>
+                            <td>{{ interested.interest.full_type }}</td>
+                            <td>
+
+                                {% if interested.super_like %}
+                                    <i class="fas fa-star"></i>
+                                {% else %}
+                                    <i class="far fa-star"></i>
+                                {% endif %}
+
+                            </td>
+
+                            <td>{{ interested.interest.name }}
+                                {% if interested.interest.search_link %}
+                                    <a title="Open help" target="_blank" href="{{ interested.interest.search_link }}">
+                                        <i class="fas fa-info-circle"></i>
+                                    </a>
+                                {% endif %}
+                            </td>
+
+
+                            <td>
+                                <i title="Copy to my list" class="fas fa-copy"></i>
+                                {% if can_modify %}
+                                    <i class="fas fa-edit"></i>
+                                    <i class="fas fa-trash-alt"></i>
+                                {% endif %}
+
+                            </td>
+                            <td><span class="text-info" data-toggle="modal" data-target="#note{{ forloop.counter }}">{{ interested.note|truncatechars:40 }}</span></td>
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -41,4 +60,32 @@
             </div>
         </div>
     </div>
+
+
+    {% for interested in owner.interested_set.all %}
+
+    <div class="modal fade" id="note{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {{ interested.note }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endfor %}
+
 {% endblock %}
+
+

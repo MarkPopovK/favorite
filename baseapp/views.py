@@ -9,11 +9,6 @@ from django.views.generic.base import View
 User = get_user_model()
 
 
-class HomeView(View):
-    def get(self, request):
-        return render(request, 'baseapp/add_interest.html')
-
-
 class InterestsView(View):
     def get(self, request, username=None):
         user = request.user

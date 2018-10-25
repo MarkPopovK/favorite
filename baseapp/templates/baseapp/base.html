@@ -66,11 +66,11 @@
                 <a class="nav-link text-white" href="#">Contact Us <span class="sr-only">(current)</span></a>
             </li>
 
-        {% if request.user.is_authenticate %}
-            <li class="nav-item text-white">
-                <a class="nav-link text-white" href="{% url 'logout' %}">Logout</a>
-            </li>
-        {% endif %}
+            {% if request.user.is_authenticate %}
+                <li class="nav-item text-white">
+                    <a class="nav-link text-white" href="{% url 'logout' %}">Logout</a>
+                </li>
+            {% endif %}
         </ul>
     </div>
 </nav>
@@ -85,7 +85,7 @@
                                  alt="profile_picture"></li>
                         <li class="pt-2"><h6>{{ owner.username }}</h6></li>
                         <li><span>{{ owner.profile.about_me }}</span></li>
-                        <li><span>{{ request.get_path }}</span></li>
+                        <li><span><a href="{{ request.get_full_path }}">Link to here</a></span></li>
                     </ul>
                 </div>
 
@@ -109,6 +109,7 @@
             return '<img src="' + $(this).data('img') + '" />';
         }
     });
+
 </script>
 </body>
 </html>

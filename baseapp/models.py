@@ -4,6 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 # Create your models here.
 from django.contrib.auth.models import User
+
 User = get_user_model()
 
 
@@ -41,6 +42,18 @@ class Interest(models.Model):
     class Meta:
         unique_together = ('name', 'interest_type',)
 
+    def full_type(self):
+        return dict(Interest.INTEREST_TYPES)[self.interest_type]
+
+    def search_link(self):
+        engines = {
+            'A': 'https://myanimelist.net/anime.php?q=',
+        }
+        url = engines.get(self.interest_type, '')
+        if url:
+            url += self.name
+        return url
+
     def __str__(self):
         return f'({self.interest_type}) {self.name}'
 
@@ -54,4 +67,3 @@ class Interested(models.Model):
 
     def __str__(self):
         return f'{self.user} - {self.interest.name}  {"+++" if self.super_like else ""}'
-
