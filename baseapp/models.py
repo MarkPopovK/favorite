@@ -1,7 +1,9 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 # Create your models here.
-
+from django.contrib.auth.models import User
 User = get_user_model()
 
 
@@ -11,8 +13,19 @@ class Profile(models.Model):
     about_me = models.TextField(max_length=280)
 
 
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
+
+
 class Interest(models.Model):
-    user_interested = models.ManyToManyField(User, through='interested')
+    user_interested = models.ManyToManyField(User, through='Interested', related_name='interests')
     name = models.CharField(max_length=255)
     thumbnail = models.ImageField(upload_to='interest_images', default='/default/thinking_emoji.png')
     INTEREST_TYPES = (
