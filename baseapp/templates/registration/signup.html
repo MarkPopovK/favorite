@@ -21,11 +21,11 @@
                 <ul class="list-unstyled">
                     <li>
                         <h2 class="text-muted m-0">
-                            <i class="fa fa-user"></i>
+                            <i class="fa fa-user-plus"></i>
                         </h2>
                     </li>
                     <li>
-                        <h2 class="text-light-blue">Login</h2>
+                        <h2 class="text-light-blue">Register</h2>
                     </li>
                 </ul>
             </div>
@@ -56,38 +56,22 @@
                         <div class="form-group">
                             {% if form.is_bound %}
                                 {% if field.errors %}
-                                    {% if field.label == "Don't remember me" %}
-                                        <div class="form-check p-0">
-                                            {% render_field field class="form-check-label" %}
-                                            <label class="checkbox-inline"
-                                                   for="id_remember_me">{{ field.label }}</label>
-                                        </div>
-                                    {% else %}
-                                        {% render_field field class="form-control is-valid" placeholder=field.label %}
-                                    {% endif %}
+                                    {% render_field field class="form-control is-invalid" %}
                                     {% for error in field.errors %}
                                         <div class="invalid-feedback">
                                             {{ error }}
                                         </div>
                                     {% endfor %}
                                 {% else %}
-                                    {% if field.label == "Don't remember me" %}
-                                        <div class="form-check p-0">
-                                            {% render_field field class="form-check-label" %}
-                                            <label class="checkbox-inline"
-                                                   for="id_remember_me">{{ field.label }}</label>
-                                        </div>
-                                    {% else %}
-                                        {% render_field field class="form-control is-invalid" placeholder=field.label %}
-                                    {% endif %}
+                                    {% render_field field class="form-control is-valid" %}
 
                                 {% endif %}
                             {% else %}
                                 {% if field.label == "Don't remember me" %}
-                                    <div class="form-check p-0">
+                                     <div class="form-check p-0">
                                         {% render_field field class="form-check-label" %}
-                                        <label class="checkbox-inline" for="id_remember_me">{{ field.label }}</label>
-                                    </div>
+                                         <label class="checkbox-inline" for="id_remember_me">{{ field.label }}</label>
+                                     </div>
                                 {% else %}
                                     {% render_field field class="form-control" placeholder=field.label %}
                                 {% endif %}
