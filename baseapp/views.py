@@ -1,6 +1,6 @@
-from django.contrib.auth import get_user_model, login
+from django.contrib.auth import get_user_model, login, authenticate
 from django.contrib.auth.views import LoginView
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import EmailUserCreationForm
 # Create your views here.
@@ -47,4 +47,19 @@ class SignUpView(View):
             "form": EmailUserCreationForm,
         }
 
+        return render(request, 'registration/signup.html', context)
+
+    def post(self, request):
+        form = EmailUserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return redirect('home')
+        else:
+            context = {
+                "form": form,
+            }
         return render(request, 'registration/signup.html', context)

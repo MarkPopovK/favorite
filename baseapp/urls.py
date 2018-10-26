@@ -1,10 +1,7 @@
-from django.conf.urls.static import static
-from django.conf import settings
-from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path, include, reverse_lazy
 from django.views.generic import TemplateView, RedirectView
-from .views import HomeView
+# from .views import HomeView
 from .views import InterestsView, RememberLoginView, SignUpView
 from .forms import RememberAuthForm
 

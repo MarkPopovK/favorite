@@ -56,22 +56,38 @@
                         <div class="form-group">
                             {% if form.is_bound %}
                                 {% if field.errors %}
-                                    {% render_field field class="form-control is-invalid" %}
+                                    {% if field.label == "Don't remember me" %}
+                                        <div class="form-check p-0">
+                                            {% render_field field class="form-check-label" %}
+                                            <label class="checkbox-inline"
+                                                   for="id_remember_me">{{ field.label }}</label>
+                                        </div>
+                                    {% else %}
+                                        {% render_field field class="form-control is-valid" placeholder=field.label %}
+                                    {% endif %}
                                     {% for error in field.errors %}
                                         <div class="invalid-feedback">
                                             {{ error }}
                                         </div>
                                     {% endfor %}
                                 {% else %}
-                                    {% render_field field class="form-control is-valid" %}
+                                    {% if field.label == "Don't remember me" %}
+                                        <div class="form-check p-0">
+                                            {% render_field field class="form-check-label" %}
+                                            <label class="checkbox-inline"
+                                                   for="id_remember_me">{{ field.label }}</label>
+                                        </div>
+                                    {% else %}
+                                        {% render_field field class="form-control is-invalid" placeholder=field.label %}
+                                    {% endif %}
 
                                 {% endif %}
                             {% else %}
                                 {% if field.label == "Don't remember me" %}
-                                     <div class="form-check p-0">
+                                    <div class="form-check p-0">
                                         {% render_field field class="form-check-label" %}
-                                         <label class="checkbox-inline" for="id_remember_me">{{ field.label }}</label>
-                                     </div>
+                                        <label class="checkbox-inline" for="id_remember_me">{{ field.label }}</label>
+                                    </div>
                                 {% else %}
                                     {% render_field field class="form-control" placeholder=field.label %}
                                 {% endif %}
