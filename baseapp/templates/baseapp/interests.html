@@ -52,7 +52,7 @@
                                 {% endif %}
 
                             </td>
-                            <td><span class="text-info" data-toggle="modal" data-target="#note{{ forloop.counter }}">{{ interested.note|truncatechars:40 }}</span></td>
+                            <td><span class="text-info" style= "cursor:pointer" data-toggle="modal" data-target="#note{{ forloop.counter }}">{{ interested.note|truncatechars:40 }}</span></td>
                         </tr>
                     {% endfor %}
                     </tbody>

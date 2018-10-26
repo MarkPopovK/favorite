@@ -65,5 +65,8 @@ class Interested(models.Model):
     super_like = models.BooleanField(default=False)
     note = models.TextField(null=True, blank=True)
 
+    class Meta:
+        ordering = ['-super_like']
+
     def __str__(self):
         return f'{self.user} - {self.interest.name}  {"+++" if self.super_like else ""}'
