@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model, login, authenticate
 from django.contrib.auth.views import LoginView
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.sites.shortcuts import get_current_site
 
@@ -42,20 +42,32 @@ class InterestsView(View):
         return render(request, 'baseapp/interests.html', context)
 
     def post(self, request):
+
         user = request.user
         addedform = InterestForm(request.POST, request.FILES)
         if addedform.is_valid():
-            interest, created = Interest.objects.get_or_create(**addedform.cleaned_data)
+            interest_name = addedform.cleaned_data['name']
+            interest_type = addedform.cleaned_data['interest_type']
+            try:
+                interest = Interest.objects.get(name=interest_name, interest_type=interest_type)
+            except Interest.DoesNotExist:
+                interest = Interest.objects.create(
+                    creator=request.user,
+                    name=interest_name,
+                    interest_type=interest_type)
 
-            interested = Interested()
-            interested.user = user
-            interested.interest = interest
-            interested.note = request.POST['note']
-            interested.save()
+            try:
+                interested = Interested.objects.get(user=user, interest=interest)
+            except Interested.DoesNotExist:
+                interested = Interested()
+                interested.user = user
+                interested.interest = interest
+                interested.note = request.POST['note']
+                interested.save(user)
         else:
             print(addedform.errors)
 
-        return self.get(request)
+        return redirect('self_interests')
 
 
 class RememberLoginView(LoginView):
@@ -88,3 +100,24 @@ class SignUpView(View):
                 "form": form,
             }
         return render(request, 'registration/signup.html', context)
+
+
+class EditInterested(View):
+    def post(self, request):
+        operation = request.POST.get('operation')
+        pk = request.POST.get('pk')
+        try:
+            interested = Interested.objects.get(pk=pk)
+        except Interested.DoesNotExist:
+            return JsonResponse({'success': False, 'errorMsg': 'Bad pk or previously deleted!'})
+
+        if request.user == interested.user:
+            if operation == 'super_like':
+                interested.super_like = not interested.super_like
+                interested.save()
+                return JsonResponse({'success': True})
+
+            if operation == 'delete':
+                interested.delete()
+                return JsonResponse({'success': True})
+

@@ -34,7 +34,7 @@ def save_user_profile(sender, instance, **kwargs):
 
 class Interest(models.Model):
     creator = models.ForeignKey(User, blank=True, null=True, db_index=True, on_delete=models.SET_NULL)
-    user_interested = models.ManyToManyField(User, through='Interested', related_name='interests', blank=True, null=True)
+    user_interested = models.ManyToManyField(User, through='Interested', related_name='interests', blank=True)
     name = models.CharField(max_length=255)
     thumbnail = models.ImageField(upload_to='interest_images', default='/default/thinking_emoji.png')
     INTEREST_TYPES = (
@@ -46,9 +46,6 @@ class Interest(models.Model):
         ('O', 'Other')
     )
     interest_type = models.CharField(max_length=1, choices=INTEREST_TYPES)
-
-    class Meta:
-        unique_together = ('name', 'interest_type',)
 
     def full_type(self):
         return dict(Interest.INTEREST_TYPES)[self.interest_type]
@@ -75,6 +72,7 @@ class Interested(models.Model):
 
     class Meta:
         ordering = ['-super_like']
+        unique_together = ('user', 'interest')
 
     def __str__(self):
         return f'{self.user} - {self.interest.name}  {"+++" if self.super_like else ""}'

@@ -1,10 +1,10 @@
 {% extends 'baseapp/base.html' %}
-    {% load static %}
-    {% block header %}
+{% load static %}
+{% block header %}
     <script src="{% static "jquery.easy-autocomplete.js" %}"></script>
     <link rel="stylesheet" href="{% static "easy-autocomplete.css" %}">
     <link rel="stylesheet" href="{% static "easy-autocomplete.themes.css" %}">
-    {% endblock %}
+{% endblock %}
 
 {% block content %}
     <div class="container">
@@ -14,14 +14,14 @@
                     <h2>Interests</h2>
                     <i class="fa fa-search ml-2"></i>
                 </div>
-            <div class="row btn-group-toggle">
-                <div class="col-2 btn btn-outline-info">Movies</div>
-                <div class="col-2 btn btn-outline-info">Series</div>
-                <div class="col-2 btn btn-outline-info">Anime</div>
-                <div class="col-2 btn btn-outline-info">Books</div>
-                <div class="col-2 btn btn-outline-info">Games</div>
-                <div class="col-2 btn btn-outline-info">Others</div>
-            </div>
+                <div class="row btn-group-toggle">
+                    <div class="col-2 btn btn-outline-info">Movies</div>
+                    <div class="col-2 btn btn-outline-info">Series</div>
+                    <div class="col-2 btn btn-outline-info">Anime</div>
+                    <div class="col-2 btn btn-outline-info">Books</div>
+                    <div class="col-2 btn btn-outline-info">Games</div>
+                    <div class="col-2 btn btn-outline-info">Others</div>
+                </div>
 
                 <table class="table table-striped mt-2">
                     <thead>
@@ -37,21 +37,26 @@
                     </thead>
 
                     <tbody>
-{% if can_modify %}
-         <tr><td colspan="6" class="btn-info" style= "cursor:pointer" data-toggle="modal" data-target="#addinterest">Add new interest</td></tr>
-{% endif %}
+                    {% if can_modify %}
+                        <tr>
+                            <td colspan="6" class="btn-info" style="cursor:pointer" data-toggle="modal"
+                                data-target="#addinterest">Add new interest
+                            </td>
+                        </tr>
+                    {% endif %}
 
                     {% for interested in owner.interested_set.all %}
-                        <tr rel="popover" data-img="{{ interested.interest.thumbnail.url }}">
+                        <tr id="interested{{ interested.pk }}" rel="popover" data-img="{{ interested.interest.thumbnail.url }}">
                             <th scope="row">{{ forloop.counter }}</th>
                             <td>{{ interested.interest.full_type }}</td>
                             <td>
-
+                                <span id="like{{ interested.pk }}" style="cursor:pointer">
                                 {% if interested.super_like %}
-                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star" onclick=superLike({{ interested.pk }})></i>
                                 {% else %}
-                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star" onclick=superLike({{ interested.pk }})></i>
                                 {% endif %}
+                                </span>
 
                             </td>
 
@@ -68,11 +73,13 @@
                                 <i title="Copy to my list" class="fas fa-copy"></i>
                                 {% if can_modify %}
                                     <i class="fas fa-edit"></i>
-                                    <i class="fas fa-trash-alt"></i>
+                                    <i class="fas fa-trash-alt" style="cursor:pointer" onclick=delInterested({{ interested.pk }})></i>
                                 {% endif %}
 
                             </td>
-                            <td><span class="text-info" style= "cursor:pointer" data-toggle="modal" data-target="#note{{ forloop.counter }}">{{ interested.note|truncatechars:40 }}</span></td>
+                            <td><span class="text-info" style="cursor:pointer" data-toggle="modal"
+                                      data-target="#note{{ forloop.counter }}">{{ interested.note|truncatechars:40 }}</span>
+                            </td>
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -84,57 +91,58 @@
 
     {% for interested in owner.interested_set.all %}
 
-    <div class="modal fade" id="note{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
-         aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    {{ interested.note }}
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {% endfor %}
-{% if can_modify %}
-        <div class="modal fade" id="addinterest" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
-         aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-
-                <form action="{% url 'self_interests' %}" method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
+        <div class="modal fade" id="note{{ forloop.counter }}" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalLongTitle"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
                     <div class="modal-body">
-                        {{ addform.as_ul }}
+                        {{ interested.note }}
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Add</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
-                </form>
-
-
+                </div>
             </div>
         </div>
-    </div>
-{% endif %}
 
-        <script>
+    {% endfor %}
+    {% if can_modify %}
+        <div class="modal fade" id="addinterest" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <form action="{% url 'self_interests' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            {{ addform.as_ul }}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Add</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+
+
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <script>
         let options = {
             url: "{% static "animes.json" %}",
             getValue: "name",
@@ -154,6 +162,35 @@
             //theme: "square"
         };
         $("#id_name").easyAutocomplete(options);
+
+        function superLike(pk){
+            $.post({
+                url: "{% url 'edit_interested' %}",
+                data: {
+                    pk: pk,
+                    operation: 'super_like',
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function (data) {
+                    $("#like" + pk).children('i').toggleClass('fas far')
+                    //.addClass('fa-star')
+                }
+        })}
+
+        function delInterested(pk){
+            $.post({
+                url: "{% url 'edit_interested' %}",
+                data: {
+                    pk: pk,
+                    operation: 'delete',
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function (data) {
+                    $("#interested" + pk).hide();
+
+                }
+        })}
+    
     </script>
 
 

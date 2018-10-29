@@ -19,8 +19,15 @@ class EmailUserCreationForm(UserCreationForm):
 
 class InterestForm(forms.ModelForm):
     note = forms.CharField(widget=forms.Textarea)
+
     class Meta:
         model = Interest
-        exclude = ['user_interested', 'thumbnail']
+        exclude = ['user_interested', 'thumbnail', 'creator']
         # widgets = {'user_interested': forms.HiddenInput()}
+    #
+    # def save(self, user=None, *args, **kwargs):
+    #     instance = super(InterestForm, self).save(commit=False, *args, **kwargs)
+    #     instance.creator = user
+    #     instance.save()
+    #     return instance
 
