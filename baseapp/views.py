@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model, login, authenticate
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.sites.shortcuts import get_current_site
 
 from baseapp.models import Interested, Interest
 from .forms import EmailUserCreationForm, InterestForm

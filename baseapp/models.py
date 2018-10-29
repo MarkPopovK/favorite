@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
+from favorite.settings import DEBUG
 
 User = get_user_model()
 
@@ -17,6 +18,13 @@ class Profile(models.Model):
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
+        if not DEBUG and not instance.is_staff:
+            instance.is_active = False
+            instance.save()
+            #Implemet send email to activate account
+
+
+
 
 
 @receiver(post_save, sender=User)
@@ -25,6 +33,7 @@ def save_user_profile(sender, instance, **kwargs):
 
 
 class Interest(models.Model):
+    creator = models.ForeignKey(User, blank=True, null=True, db_index=True, on_delete=models.SET_NULL)
     user_interested = models.ManyToManyField(User, through='Interested', related_name='interests', blank=True, null=True)
     name = models.CharField(max_length=255)
     thumbnail = models.ImageField(upload_to='interest_images', default='/default/thinking_emoji.png')
