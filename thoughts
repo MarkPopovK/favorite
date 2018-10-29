@@ -19,3 +19,8 @@ pages:
     auth(login/register)
     add new fav (and there should be suggestions?)
     user page with his favs
+
+left:
+    new fav
+    interactive table
+    copy/remove interest buttons

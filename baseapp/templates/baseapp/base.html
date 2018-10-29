@@ -49,13 +49,13 @@
     <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
         <!--<a class="navbar-brand ml-auto" href="#">Hidden brand</a>-->
         <ul class="navbar-nav ml-auto">
-            {% if not request.user.is_authenticate %}
+            {% if not request.user.is_authenticated %}
 
                 <li class="nav-item active text-white">
-                    <a class="nav-link text-white" href="#">Register <span class="sr-only">(current)</span></a>
+                    <a class="nav-link text-white" href="{% url 'signup' %}">Register <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item active text-white">
-                    <a class="nav-link text-white" href="#">Login <span class="sr-only">(current)</span></a>
+                    <a class="nav-link text-white" href="{% url 'login' %}">Login <span class="sr-only">(current)</span></a>
                 </li>
 
             {% endif %}
@@ -66,7 +66,7 @@
                 <a class="nav-link text-white" href="#">Contact Us <span class="sr-only">(current)</span></a>
             </li>
 
-            {% if request.user.is_authenticate %}
+            {% if request.user.is_authenticated %}
                 <li class="nav-item text-white">
                     <a class="nav-link text-white" href="{% url 'logout' %}">Logout</a>
                 </li>
@@ -106,7 +106,7 @@
         trigger: 'hover',
         placement: 'bottom',
         content: function () {
-            return '<img src="' + $(this).data('img') + '" />';
+            return '<img height="250" src="' + $(this).data('img') + '" />';
         }
     });
 

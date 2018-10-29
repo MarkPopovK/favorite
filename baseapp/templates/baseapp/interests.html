@@ -1,4 +1,10 @@
 {% extends 'baseapp/base.html' %}
+    {% load static %}
+    {% block header %}
+    <script src="{% static "jquery.easy-autocomplete.js" %}"></script>
+    <link rel="stylesheet" href="{% static "easy-autocomplete.css" %}">
+    <link rel="stylesheet" href="{% static "easy-autocomplete.themes.css" %}">
+    {% endblock %}
 
 {% block content %}
     <div class="container">
@@ -8,6 +14,15 @@
                     <h2>Interests</h2>
                     <i class="fa fa-search ml-2"></i>
                 </div>
+            <div class="row btn-group-toggle">
+                <div class="col-2 btn btn-outline-info">Movies</div>
+                <div class="col-2 btn btn-outline-info">Series</div>
+                <div class="col-2 btn btn-outline-info">Anime</div>
+                <div class="col-2 btn btn-outline-info">Books</div>
+                <div class="col-2 btn btn-outline-info">Games</div>
+                <div class="col-2 btn btn-outline-info">Others</div>
+            </div>
+
                 <table class="table table-striped mt-2">
                     <thead>
                     <tr>
@@ -20,7 +35,12 @@
 
                     </tr>
                     </thead>
+
                     <tbody>
+{% if can_modify %}
+         <tr><td colspan="6" class="btn-info" style= "cursor:pointer" data-toggle="modal" data-target="#addinterest">Add new interest</td></tr>
+{% endif %}
+
                     {% for interested in owner.interested_set.all %}
                         <tr rel="popover" data-img="{{ interested.interest.thumbnail.url }}">
                             <th scope="row">{{ forloop.counter }}</th>
@@ -85,6 +105,57 @@
     </div>
 
     {% endfor %}
+{% if can_modify %}
+        <div class="modal fade" id="addinterest" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <form action="{% url 'self_interests' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        {{ addform.as_ul }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Add</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+        <script>
+        let options = {
+            url: "{% static "animes.json" %}",
+            getValue: "name",
+            list: {
+                match: {
+                    enabled: true
+                }
+            },
+
+            template: {
+                type: "iconLeft",
+                fields: {
+                    iconSrc: "thumbnail"
+                }
+            },
+
+            //theme: "square"
+        };
+        $("#id_name").easyAutocomplete(options);
+    </script>
+
 
 {% endblock %}
 

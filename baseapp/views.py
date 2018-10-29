@@ -2,11 +2,14 @@ from django.contrib.auth import get_user_model, login, authenticate
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
-from .forms import EmailUserCreationForm
+
+from baseapp.models import Interested, Interest
+from .forms import EmailUserCreationForm, InterestForm
 # Create your views here.
 from django.views.generic.base import View
 
 User = get_user_model()
+
 
 
 class InterestsView(View):
@@ -30,7 +33,28 @@ class InterestsView(View):
             'owner': owner,
             'can_modify': can_modify,
         }
+
+        if can_modify:
+            addform = InterestForm()
+            context['addform'] = addform
+
         return render(request, 'baseapp/interests.html', context)
+
+    def post(self, request):
+        user = request.user
+        addedform = InterestForm(request.POST, request.FILES)
+        if addedform.is_valid():
+            interest, created = Interest.objects.get_or_create(**addedform.cleaned_data)
+
+            interested = Interested()
+            interested.user = user
+            interested.interest = interest
+            interested.note = request.POST['note']
+            interested.save()
+        else:
+            print(addedform.errors)
+
+        return self.get(request)
 
 
 class RememberLoginView(LoginView):

@@ -25,7 +25,7 @@ def save_user_profile(sender, instance, **kwargs):
 
 
 class Interest(models.Model):
-    user_interested = models.ManyToManyField(User, through='Interested', related_name='interests')
+    user_interested = models.ManyToManyField(User, through='Interested', related_name='interests', blank=True, null=True)
     name = models.CharField(max_length=255)
     thumbnail = models.ImageField(upload_to='interest_images', default='/default/thinking_emoji.png')
     INTEREST_TYPES = (
